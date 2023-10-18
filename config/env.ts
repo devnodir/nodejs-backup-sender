@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import getEnv from "@/utils/getEnv";
+import getEnv from "utils/getEnv";
 
 dotenv.config();
 

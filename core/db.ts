@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import env from "@/config/env";
+import env from "config/env";
 
 const db = mongoose.connection;
 db.on("error", () => {
