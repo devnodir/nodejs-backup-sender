@@ -1,0 +1,14 @@
+{
+	"type": "service_account",
+	"project_id": "play-integrity-p34ca03kw9c78af",
+	"private_key_id": "50d0755e60174f931d9291529dbbaab8b4b7e7f5",
+	"private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDake8BaKU++7UW\nuy1gNlZYU1JqAEP5q7SQtiIXosdJig+ZyV1KhzVgb0Y4ZfAFbuJWnQOMZgSg5t+5\nmPBMetvRU8BBV3rbVis8liUH5oCUaKBmuoB0gZMLj82q90Ghb2XNLUbVV2BkgFrQ\nvSd6ZtsdtpY9YJj+aWjCtu/k2jtAudnEb68pTdyBT/ASbHjYhHh/57D/srSx+iAd\nyWCIBi0lC5EdwfaYe1mUX3iBZl1pk8QV8F55CUFgI1b3Oj2MPYliLtkI0E2HQyMG\nouOKfPovZ3uuJchyAGcuuvRVwMiBsaXol+uSxsYrCjHhejJ3fWvf+4MTaoURhf7v\nVVtTJsF/AgMBAAECggEAWogu2MUJCS0GJZuzIFJxclVU4h4pCb3S5UvjlCmy5SV/\n78Gl2Cxn8gE1M0AZ6o4yxxBzO1C4YxMuIPiVtAABk9NeY1JCS56F+yrvvLV/lbk+\nkz513YwcJaJTXJjcwOrc3l7+I3j1LruxohtvQjZfVQ/fbB3aUSrFHz3Z4M950oVE\nHNI2ns71jAlTeA9R/FldjFNLzqbYcJpDYk9EVWfQA78rf/KjPd/viV23Zb0kJACx\nBPU9rubF4EjvH3pJSwjiusiOqB2cC1p13ooVbGSPQYXc24NjVPZjn60P+OKGnVnr\nubqJaGmD43XBVDQzu7QdowQLWDSah0Ls9DE6Xo9GaQKBgQD9mJ2XR+Ufa6e56Okz\nFGmsiT6gYxXYB7oNPSbVvW7ugm9l/ayXuCRTIXqkFo9ubpgQFGEfoMTFGouqD+AA\nMrRAjAuGkhgAoeilRLPgx+7FxrIk5Y2Y3Flq/hayXzSuk2/Ye8O3QoGfQnTQLmXi\nWTbcL0If2F/9KCA6LQeA6ibwZwKBgQDcpFKU9Yr382ksGcjQVEIpSZv4G0/uNOEL\nunVMFdT6gLlTY2+bKWXI9nfSrrnQEe8vCX41KbJs6w4ignWdQuHTlV7GCOz4F07B\n5OJU5E7X6sLBV3613Uy1lQA/Zf+zzDxQJZUgR1I3H/HiXzF99PYZs7xNkh1rFpIi\nEwPD64cXKQKBgHKda3xYLiIJUgEgV2WSsEAet4NdxR2iQGCDZu3rdBuwMBD0mfDo\ndOJtmzRWTfUnXurFiy/0RXqgCMeP7TmpsPYLVZo4pUiD5NXtOy84rZ4Ns64hYeHY\nlUFaHX/4r6LHWCGLrmVBVbxZGNqOXdXzZGwXn9cswBV28TnZ6C5Hpdm5AoGBAJQ+\nr+G3rJx15ickV+Fpi150P6AOscCptL8Nk3wAey2oSVx2xejpgqLovo9GqD/dnOfs\np+iOUHyP3dpf7ygvZM2lYZ0LKDR0bI0n/M3u6+50pFAFOnR08PJb32O5Y3lpcuii\np7SdVucExp9DOFyZtrSEJ7OyxaNK8fqE7hW37PcpAoGBAMxksJn2YEA5OpWOSMz3\norcWNha07b1NJkDZ2ZNcfveRs2LYgUpAQ/nGMqou1wMCF3nc03wwISmd7Mfu1hTM\nzuIJOIkIudczng5Sbwg9k7X4KKUHDtdmx3HA7wwt9EO9Da4w8YYQQnl2b65umm8g\nErg60DshFYRL4Q0WoUl+zykU\n-----END PRIVATE KEY-----\n",
+	"client_email": "devnodir@play-integrity-p34ca03kw9c78af.iam.gserviceaccount.com",
+	"client_id": "118260780915714958855",
+	"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+	"token_uri": "https://oauth2.googleapis.com/token",
+	"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+	"client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/devnodir%40play-integrity-p34ca03kw9c78af.iam.gserviceaccount.com",
+	"universe_domain": "googleapis.com"
+  }
+  
