@@ -44,7 +44,7 @@ class Google {
 				},
 				{
 					onUploadProgress: (e) => {
-						this.progressLog(`${((parseInt(e.bytesRead) / size) * 100).toFixed(0)}`);
+						console.log(`${((parseInt(e.bytesRead) / size) * 100).toFixed(0)}`);
 					}
 				}
 			)
