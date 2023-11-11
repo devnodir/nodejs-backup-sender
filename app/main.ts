@@ -65,7 +65,9 @@ class Main {
 			await this.sentToEmail(url);
 
 			await this.deleteCurrentFile();
+			console.info("Operation finished at", dayjs().format("DD.MM.YYYY - HH:mm"));
 		} catch (e) {
+			console.warn("Operation failed at", dayjs().format("DD.MM.YYYY - HH:mm"));
 			await this.bot.sendingFile(filename, humanSize, "failed");
 			await this.bot.sendError(e);
 		}
