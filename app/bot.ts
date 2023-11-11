@@ -52,8 +52,8 @@ Free: ${humanFileSize(os.freemem())}
 												}
 											]
 										]
-									},
-									parse_mode: "Markdown"
+									}
+									// parse_mode: "Markdown"
 							  }
 							: undefined
 					)
