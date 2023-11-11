@@ -58,7 +58,7 @@ class Google {
 		if (files) {
 			files?.splice(0, 11);
 			for (let file of files) {
-				if (file.id) await drive.files.delete({ fileId: file.id }).catch((e) => console.log(e.message));
+				if (file.id) await drive.files.delete({ fileId: file.id });
 			}
 		}
 	};

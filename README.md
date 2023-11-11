@@ -1,2 +1,16 @@
 # nodejs-backup-sender
-This project made for send backup files 
+
+This project made for send backup files
+
+.env
+
+PATH_OF_FOLDER
+TELEGRAM_BOT_API_TOKEN
+SENDER_TO_EMAIL
+SENDER_FROM_EMAIL
+SENDER_AUTH_USER
+SENDER_AUTH_PASS
+CLIENT_ID
+CLIENT_SECRET
+REDIRECT_URI
+FOLDER_ID

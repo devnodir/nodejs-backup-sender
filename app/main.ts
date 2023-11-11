@@ -16,8 +16,12 @@ class Main {
 
 	async start() {
 		this.bot.init();
-		const watcher = chokidar.watch(env.PathOfFolder, { ignored: /(^|[\/\\])\../, persistent: true });
-		watcher.on("add", (path) => {
+		const watcher = chokidar.watch(env.PathOfFolder, {
+			ignored: /(^|[\/\\])\../,
+			persistent: true,
+			awaitWriteFinish: true
+		});
+		watcher.on("add", (path, stats) => {
 			this.queueManager.enqueue(path);
 			if (this.queueManager.size() === 1) {
 				this.looper();
@@ -40,7 +44,9 @@ class Main {
 
 		try {
 			await this.google.deleteOlderFiles();
-		} catch {}
+		} catch (e) {
+			await this.bot.sendError(e);
+		}
 
 		try {
 			const ids = await this.bot.sendingFile(filename, humanSize, "started");
@@ -62,7 +68,7 @@ class Main {
 		}
 	}
 
-	async sentToEmail(url: any) {
+	sentToEmail(url: any) {
 		const transporter = mailer.createTransport({
 			host: "smtp.mail.ru",
 			port: 587,
@@ -73,7 +79,7 @@ class Main {
 			}
 		});
 
-		await transporter.sendMail({
+		return transporter.sendMail({
 			sender: env.SenderFromEmail,
 			to: env.SenderToEmail,
 			subject: "1C Backup",
