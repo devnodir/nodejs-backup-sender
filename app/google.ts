@@ -10,31 +10,48 @@ class Google {
 
 	private authorize = async () => {
 		const jwtClient = new google.auth.JWT(apikeys.client_email, undefined, apikeys.private_key, this.scope);
-		await jwtClient.authorize();
-		return jwtClient;
+		return jwtClient
+			.authorize()
+			.then((res) => {
+				console.log("Google auth done");
+				return res;
+			})
+			.catch((err) => {
+				console.error("Google auth failed");
+				return err.response.data;
+			});
 	};
 
 	private getDrive = async () => {
-		const authClient = await this.authorize().catch((err) => err.response.data);
+		const authClient = await this.authorize();
 		return google.drive({ version: "v3", auth: authClient });
 	};
 
 	uploadFile = async (path: string, name: string, size: number) => {
 		const drive = await this.getDrive();
-		return drive.files.create(
-			{
-				requestBody: {
-					parents: this.parents,
-					name
+		return drive.files
+			.create(
+				{
+					requestBody: {
+						parents: this.parents,
+						name
+					},
+					media: { body: createReadStream(path), mimeType: "application/octet-stream" }
 				},
-				media: { body: createReadStream(path), mimeType: "application/octet-stream" }
-			},
-			{
-				onUploadProgress: (e) => {
-					console.log(`${((parseInt(e.bytesRead) / size) * 100).toFixed(0)}`);
+				{
+					onUploadProgress: (e) => {
+						console.log(`${((parseInt(e.bytesRead) / size) * 100).toFixed(0)}`);
+					}
 				}
-			}
-		);
+			)
+			.then((res) => {
+				console.log("File uploading done");
+				return res;
+			})
+			.catch((err) => {
+				console.error("File uploading failed");
+				return err;
+			});
 	};
 
 	generatePublicUrl = async (fileId: any) => {
@@ -58,7 +75,17 @@ class Google {
 		if (files) {
 			files?.splice(0, 11);
 			for (let file of files) {
-				if (file.id) await drive.files.delete({ fileId: file.id });
+				if (file.id)
+					await drive.files
+						.delete({ fileId: file.id })
+						.then((res) => {
+							console.log("Deleting file done:", file.name);
+							return res;
+						})
+						.catch((err) => {
+							console.error("Deleting file failed:", file.name);
+							return err;
+						});
 			}
 		}
 	};

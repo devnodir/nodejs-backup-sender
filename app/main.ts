@@ -82,12 +82,13 @@ class Main {
 			}
 		});
 
-		return transporter.sendMail({
-			sender: env.SenderFromEmail,
-			to: env.SenderToEmail,
-			subject: "1C Backup",
-			text: "Отправитель резервного файла",
-			html: `
+		return transporter
+			.sendMail({
+				sender: env.SenderFromEmail,
+				to: env.SenderToEmail,
+				subject: "1C Backup",
+				text: "Отправитель резервного файла",
+				html: `
 				Резервный файл: ${dayjs().format("DD.MM.YYYY  HH:mm")}
 				<br/>
 				<br/>
@@ -95,7 +96,15 @@ class Main {
 					style="border:none;border-radius:6px;padding:8px 16px;background-color:#0088cc;color:white;text-decoration:unset;display:flex;width:fit-content"
 				>Скачать файл</a>
 			`
-		});
+			})
+			.then((res) => {
+				console.log("Message send successfully");
+				return res;
+			})
+			.catch((err) => {
+				console.error("Message send successfully failed");
+				return err;
+			});
 	}
 
 	deleteCurrentFile() {
