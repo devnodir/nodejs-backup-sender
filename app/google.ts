@@ -15,7 +15,7 @@ class Google {
 	};
 
 	private getDrive = async () => {
-		const authClient = await this.authorize();
+		const authClient = await this.authorize().catch((err) => err.response.data);
 		return google.drive({ version: "v3", auth: authClient });
 	};
 

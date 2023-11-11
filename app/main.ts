@@ -65,9 +65,9 @@ class Main {
 			await this.sentToEmail(url);
 
 			await this.deleteCurrentFile();
-		} catch (e: any) {
+		} catch (e) {
 			await this.bot.sendingFile(filename, humanSize, "failed");
-			await this.bot.sendError(e.message);
+			await this.bot.sendError(e);
 		}
 	}
 
