@@ -98,11 +98,11 @@ class Main {
 			`
 			})
 			.then((res) => {
-				console.log("Message send successfully");
+				console.log("Message send to email successfully");
 				return res;
 			})
 			.catch((err) => {
-				console.error("Message send successfully failed");
+				console.error("Message send to email successfully failed");
 				return err;
 			});
 	}

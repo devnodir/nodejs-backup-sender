@@ -58,12 +58,14 @@ Free: ${humanFileSize(os.freemem())}
 							: undefined
 					)
 					.then((res) => {
+						console.log("Bot send message done");
 						messageIds.push({
 							chatId: id,
 							messageId: res.message_id
 						});
 					})
 					.catch((err) => {
+						console.error("Bot send message error", err.message);
 						if (err.message === "ETELEGRAM: 400 Bad Request: chat not found") {
 							deleteId(id);
 						}
@@ -100,9 +102,11 @@ ${statusObj[status]}
 		try {
 			for (let id of ids) {
 				await this.bot.deleteMessage(id.chatId, id.messageId);
+				console.log("Delete last message done");
 			}
 		} catch (e: any) {
-			console.log(e.message);
+			console.error("Delete last message failed");
+			console.error(e.message);
 		}
 	}
 

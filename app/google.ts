@@ -10,16 +10,17 @@ class Google {
 
 	private authorize = async () => {
 		const jwtClient = new google.auth.JWT(apikeys.client_email, undefined, apikeys.private_key, this.scope);
-		return jwtClient
+		jwtClient
 			.authorize()
 			.then((res) => {
 				console.log("Google auth done");
 				return res;
 			})
 			.catch((err) => {
-				console.error("Google auth failed");
+				console.error("Google auth failed", err);
 				return err.response.data;
 			});
+		return jwtClient;
 	};
 
 	private getDrive = async () => {
@@ -49,7 +50,7 @@ class Google {
 				return res;
 			})
 			.catch((err) => {
-				console.error("File uploading failed");
+				console.error("File uploading failed", err);
 				return err;
 			});
 	};
@@ -63,10 +64,19 @@ class Google {
 				type: "anyone"
 			}
 		});
-		return drive.files.get({
-			fileId: fileId,
-			fields: "webViewLink, webContentLink"
-		});
+		return drive.files
+			.get({
+				fileId: fileId,
+				fields: "webViewLink, webContentLink"
+			})
+			.then((res) => {
+				console.log("Generate file link done");
+				return res;
+			})
+			.catch((err) => {
+				console.error("Generate file link failed", err);
+				return err;
+			});
 	};
 
 	deleteOlderFiles = async () => {
@@ -83,7 +93,7 @@ class Google {
 							return res;
 						})
 						.catch((err) => {
-							console.error("Deleting file failed:", file.name);
+							console.error("Deleting file failed:", err.response?.data);
 							return err;
 						});
 			}
