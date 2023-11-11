@@ -8,6 +8,7 @@ import Queue from "../utils/queue";
 import humanFileSize from "../utils/humanFileSize";
 import Bot from "./bot";
 import Google from "./google";
+import fs from "fs/promises";
 
 class Main {
 	queueManager = new Queue();
@@ -24,12 +25,15 @@ class Main {
 			ignoreInitial: true,
 			alwaysStat: true
 		});
-		watcher.on("add", (path, stats) => {
+		watcher.on("add", async (path, stats) => {
 			console.log("path", path);
 			console.log("stats", stats);
-			this.queueManager.enqueue(path);
-			if (this.queueManager.size() === 1) {
-				this.looper();
+			const result = await this.checkFile(path);
+			if (result) {
+				this.queueManager.enqueue(path);
+				if (this.queueManager.size() === 1) {
+					this.looper();
+				}
 			}
 		});
 	}
@@ -113,6 +117,17 @@ class Main {
 
 	deleteCurrentFile() {
 		return unlink(this.queueManager.peek());
+	}
+
+	async checkFile(path: string) {
+		let isSuccess = false;
+		try {
+			await fs.open(path, "r+");
+			isSuccess = true;
+		} catch (e) {
+			console.log("File read error", e);
+		}
+		return isSuccess;
 	}
 }
 
