@@ -19,7 +19,10 @@ class Main {
 		const watcher = chokidar.watch(env.PathOfFolder, {
 			ignored: /(^|[\/\\])\../,
 			persistent: true,
-			awaitWriteFinish: true
+			awaitWriteFinish: true,
+			usePolling: true,
+			ignoreInitial: true,
+			alwaysStat: true
 		});
 		watcher.on("add", (path, stats) => {
 			console.log("path", path);
@@ -44,11 +47,11 @@ class Main {
 		const fileSize = await stat(filePath).then((res) => res.size);
 		const humanSize = humanFileSize(fileSize);
 
-		try {
-			await this.google.deleteOlderFiles();
-		} catch (e) {
-			await this.bot.sendError(e);
-		}
+		// try {
+		// 	await this.google.deleteOlderFiles();
+		// } catch (e) {
+		// 	await this.bot.sendError(e);
+		// }
 
 		try {
 			const ids = await this.bot.sendingFile(filename, humanSize, "started");
