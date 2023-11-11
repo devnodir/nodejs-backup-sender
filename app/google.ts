@@ -2,11 +2,14 @@ import { google } from "googleapis";
 import { createReadStream } from "fs";
 import env from "../config/env";
 import apikeys from "../config/apikey.json";
+import debounce from "../utils/debounce";
 
 class Google {
 	oauth2Client = new google.auth.OAuth2(env.ClientId, env.ClientSecret, env.RedirectUri);
 	scope = ["https://www.googleapis.com/auth/drive"];
 	parents = [env.FolderId];
+
+	progressLog = (count: string) => debounce(() => console.info(count), 1);
 
 	private authorize = async () => {
 		const jwtClient = new google.auth.JWT(apikeys.client_email, undefined, apikeys.private_key, this.scope);
@@ -41,7 +44,7 @@ class Google {
 				},
 				{
 					onUploadProgress: (e) => {
-						console.log(`${((parseInt(e.bytesRead) / size) * 100).toFixed(0)}`);
+						this.progressLog(`${((parseInt(e.bytesRead) / size) * 100).toFixed(0)}`);
 					}
 				}
 			)
