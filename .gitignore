@@ -4,3 +4,5 @@ package-lock.json
 .idea
 .env
 .DS_Store
+config/apikey.json
+config/data.json
