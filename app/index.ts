@@ -7,6 +7,8 @@ const main = new Main();
 
 main.start();
 
+// setInterval(() => main.start(), 1000);
+
 // start listen port
 (async () => {
 	app.listen(env.HttpPort);

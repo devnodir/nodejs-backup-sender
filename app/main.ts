@@ -16,7 +16,7 @@ class Main {
 	google = new Google();
 
 	async start() {
-		// this.bot.init();
+		this.bot.init();
 		const watcher = chokidar.watch(env.PathOfFolder, {
 			ignored: /(^|[\/\\])\../,
 			persistent: true,
@@ -25,23 +25,24 @@ class Main {
 		watcher.on("add", async (path, stats) => {
 			console.log("path", path);
 			console.log("stats", stats);
-			const result = await this.checkFile(path);
-			console.log(result);
-
-			if (result) {
-				this.queueManager.enqueue(path);
-				if (this.queueManager.size() === 1) {
-					this.looper();
-				}
-			}
+			this.startLooper(path);
 		});
+		setInterval(() => this.startLooper(), 1000 * 60 * 60);
+	}
+
+	startLooper(path?: string) {
+		if (this.queueManager.getAll().includes(path)) return;
+		if (path) this.queueManager.enqueue(path);
+		if (this.queueManager.size() === 1) {
+			this.looper();
+		}
 	}
 
 	async looper() {
 		while (this.queueManager.size() > 0) {
 			const item = this.queueManager.peek();
-			await this.sender(item);
-			this.queueManager.dequeue();
+			const result = await this.checkFile(item);
+			if (result) await this.sender(item);
 		}
 	}
 
@@ -75,6 +76,8 @@ class Main {
 			console.warn("Operation failed at", dayjs().format("DD.MM.YYYY - HH:mm"));
 			await this.bot.sendingFile(filename, humanSize, "failed");
 			await this.bot.sendError(e);
+		} finally {
+			this.queueManager.dequeue();
 		}
 	}
 

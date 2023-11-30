@@ -29,6 +29,10 @@ class Queue {
 		this.queue = [];
 	}
 
+	getAll() {
+		return this.queue;
+	}
+
 	queue: any[];
 }
 export default Queue;
