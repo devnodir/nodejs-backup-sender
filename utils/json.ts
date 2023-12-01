@@ -1,4 +1,5 @@
 import jsonfile from "jsonfile";
+import logger from "./logger";
 
 const filePath = "./config/data.json";
 
@@ -16,7 +17,7 @@ export const addId = async (id: number) => {
 		if (!ids.includes(id)) ids.push(id);
 		await writeFile("ids", ids);
 	} catch (e: any) {
-		console.log(e.message);
+		logger.error(e.message);
 	}
 };
 
@@ -27,6 +28,6 @@ export const deleteId = async (id: number) => {
 		ids.splice(index, 1);
 		await writeFile("ids", ids);
 	} catch (e: any) {
-		console.log(e.message);
+		logger.error(e.message);
 	}
 };

@@ -3,24 +3,23 @@ import { createReadStream } from "fs";
 import env from "../config/env";
 import apikeys from "../config/apikey.json";
 import debounce from "../utils/debounce";
+import logger from "../utils/logger";
 
 class Google {
 	oauth2Client = new google.auth.OAuth2(env.ClientId, env.ClientSecret, env.RedirectUri);
 	scope = ["https://www.googleapis.com/auth/drive"];
 	parents = [env.FolderId];
 
-	progressLog = (count: string) => debounce(() => console.info(count), 1);
-
 	private authorize = async () => {
 		const jwtClient = new google.auth.JWT(apikeys.client_email, undefined, apikeys.private_key, this.scope);
 		jwtClient
 			.authorize()
 			.then((res) => {
-				console.log("Google auth done");
+				logger.success("Google auth done");
 				return res;
 			})
 			.catch((err) => {
-				console.error("Google auth failed", err);
+				logger.error(`Google auth failed: ${err.message}`);
 				return err.response.data;
 			});
 		return jwtClient;
@@ -44,16 +43,16 @@ class Google {
 				},
 				{
 					onUploadProgress: (e) => {
-						console.log(`${((parseInt(e.bytesRead) / size) * 100).toFixed(0)}`);
+						logger.info(`${((parseInt(e.bytesRead) / size) * 100).toFixed(0)}`);
 					}
 				}
 			)
 			.then((res) => {
-				console.log("File uploading done");
+				logger.success("File uploading done");
 				return res;
 			})
 			.catch((err) => {
-				console.error("File uploading failed", err);
+				logger.error(`File uploading failed: ${err.message}`);
 				return err;
 			});
 	};
@@ -73,11 +72,11 @@ class Google {
 				fields: "webViewLink, webContentLink"
 			})
 			.then((res) => {
-				console.log("Generate file link done");
+				logger.success("Generate file link done");
 				return res;
 			})
 			.catch((err) => {
-				console.error("Generate file link failed", err);
+				logger.error(`Generate file link failed: ${err.message}`);
 				return err;
 			});
 	};
@@ -92,11 +91,11 @@ class Google {
 					await drive.files
 						.delete({ fileId: file.id })
 						.then((res) => {
-							console.log("Deleting file done:", file.name);
+							logger.success(`Deleting file done: ${file.name}`);
 							return res;
 						})
 						.catch((err) => {
-							console.error("Deleting file failed:", err.response?.data);
+							logger.error(`Deleting file failed: ${err.response?.data}`);
 							return err;
 						});
 			}

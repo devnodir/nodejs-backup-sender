@@ -4,6 +4,7 @@ import env from "../config/env";
 import humanFileSize from "../utils/humanFileSize";
 import { addId, deleteId, readFile } from "../utils/json";
 import dayjs from "dayjs";
+import logger from "../utils/logger";
 
 class Bot {
 	bot = new TelegramBot(env.TelegramBotToken, { polling: true });
@@ -58,21 +59,21 @@ Free: ${humanFileSize(os.freemem())}
 							: undefined
 					)
 					.then((res) => {
-						console.log("Bot send message done");
+						logger.success("Bot send message done");
 						messageIds.push({
 							chatId: id,
 							messageId: res.message_id
 						});
 					})
 					.catch((err) => {
-						console.error("Bot send message error", err.message);
+						logger.error(`Bot send message error ${err.message}`);
 						if (err.message === "ETELEGRAM: 400 Bad Request: chat not found") {
 							deleteId(id);
 						}
 					});
 			}
 		} catch (e: any) {
-			console.log(e.message);
+			logger.error(e.message);
 		}
 		return messageIds;
 	}
@@ -102,11 +103,11 @@ ${statusObj[status]}
 		try {
 			for (let id of ids) {
 				await this.bot.deleteMessage(id.chatId, id.messageId);
-				console.log("Delete last message done");
+				logger.success("Delete last message done");
 			}
 		} catch (e: any) {
-			console.error("Delete last message failed");
-			console.error(e.message);
+			logger.error("Delete last message failed");
+			logger.error(e.message);
 		}
 	}
 

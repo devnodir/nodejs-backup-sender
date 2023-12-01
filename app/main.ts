@@ -1,40 +1,40 @@
-import chokidar from "chokidar";
+import dayjs from "dayjs";
+import fs, { stat, unlink } from "fs/promises";
 import mailer from "nodemailer";
 import path from "path";
-import dayjs from "dayjs";
-import { stat, unlink } from "fs/promises";
 import env from "../config/env";
-import Queue from "../utils/queue";
 import humanFileSize from "../utils/humanFileSize";
+import logger from "../utils/logger";
+import Queue from "../utils/queue";
 import Bot from "./bot";
 import Google from "./google";
-import fs from "fs/promises";
 
 class Main {
 	queueManager = new Queue();
 	bot = new Bot();
 	google = new Google();
+	folderPath = env.PathOfFolder;
+	ignorePatter = /(^|[\/\\])\../;
 
 	async start() {
 		this.bot.init();
-		const watcher = chokidar.watch(env.PathOfFolder, {
-			ignored: /(^|[\/\\])\../,
-			persistent: true,
-			awaitWriteFinish: true
-		});
-		watcher.on("add", async (path, stats) => {
-			console.log("path", path);
-			console.log("stats", stats);
-			this.startLooper(path);
-		});
-		setInterval(() => this.startLooper(), 1000 * 60 * 60);
+		setInterval(() => this.startLooper(), 1000 * 60 * 5);
 	}
 
-	startLooper(path?: string) {
-		if (this.queueManager.getAll().includes(path)) return;
-		if (path) this.queueManager.enqueue(path);
-		if (this.queueManager.size() === 1) {
-			this.looper();
+	async startLooper() {
+		const filesPath = await this.getFiles();
+		for (const filePath of filesPath) {
+			if (filePath && this.queueManager.getAll().includes(filePath)) {
+				logger.info(`Bu fayl queue da allaqachon bor: ${path.basename(filePath)}`);
+				return;
+			}
+			if (filePath) {
+				this.queueManager.enqueue(filePath);
+				logger.success(`Bu fayl queue ga qo'shildi: ${path.basename(filePath)}`);
+			}
+			if (this.queueManager.size() === 1) {
+				this.looper();
+			}
 		}
 	}
 
@@ -71,9 +71,9 @@ class Main {
 			await this.sentToEmail(url);
 
 			await this.deleteCurrentFile();
-			console.info("Operation finished at", dayjs().format("DD.MM.YYYY - HH:mm"));
+			logger.info("Operation finished at", dayjs().format("DD.MM.YYYY - HH:mm"));
 		} catch (e) {
-			console.warn("Operation failed at", dayjs().format("DD.MM.YYYY - HH:mm"));
+			logger.warn("Operation failed at", dayjs().format("DD.MM.YYYY - HH:mm"));
 			await this.bot.sendingFile(filename, humanSize, "failed");
 			await this.bot.sendError(e);
 		} finally {
@@ -108,11 +108,11 @@ class Main {
 			`
 			})
 			.then((res) => {
-				console.log("Message send to email successfully");
+				logger.success("Message send to email successfully");
 				return res;
 			})
 			.catch((err) => {
-				console.error("Message send to email successfully failed");
+				logger.error("Message send to email successfully failed");
 				return err;
 			});
 	}
@@ -126,10 +126,34 @@ class Main {
 		try {
 			await fs.open(path, "r+");
 			isSuccess = true;
-		} catch (e) {
-			console.log("File read error", e);
-		}
+		} catch {}
 		return isSuccess;
+	}
+	async getFiles() {
+		const files: string[] = [];
+		try {
+			const fileList = await fs.readdir(this.folderPath);
+			for (const file of fileList) {
+				const filePath = `${this.folderPath}/${file}`;
+				logger.info("Yangi fayl topildi: ", file);
+				if (this.ignorePatter.test(file)) {
+					logger.error(`Noto'g'ri formatdagi fayl: ${file}`);
+					continue;
+				}
+				if (!(await fs.stat(filePath)).isFile()) {
+					logger.error(`Bu fayl emas: ${file}`);
+					continue;
+				}
+				if (!(await this.checkFile(filePath))) {
+					logger.error(`Bu faylni o'qib bo'lmadi: ${file}`);
+					continue;
+				}
+				files.push(filePath);
+			}
+		} catch {
+			logger.error(`Fayllarni tekshirishda xatolik`);
+		}
+		return files;
 	}
 }
 
