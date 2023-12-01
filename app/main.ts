@@ -18,6 +18,7 @@ class Main {
 
 	async start() {
 		this.bot.init();
+		this.startLooper();
 		setInterval(() => this.startLooper(), 1000 * 60 * 5);
 	}
 
